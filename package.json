@@ -1,0 +1,35 @@
+{
+  "name": "qemu-gui",
+  "version": "1.0.0",
+  "description": "A web-based QEMU interface",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "node server/index.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slowtacocar/qemu-gui.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/slowtacocar/qemu-gui/issues"
+  },
+  "homepage": "https://github.com/slowtacocar/qemu-gui#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "next": "^9.5.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0"
+  }
+}

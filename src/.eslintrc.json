@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "globals": {
+    "React": "readonly"
+  },
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": false
+  },
+  "plugins": ["babel"],
+  "extends": ["plugin:react/recommended", "plugin:react-hooks/recommended"],
+  "rules": {
+    "valid-typeof": 0,
+    "babel/valid-typeof": 1
+  }
+}
