@@ -1,0 +1,9 @@
+@value v-black: rgb(34, 34, 34);
+@value v-background-gray: rgb(238, 238, 238);
+@value v-padding-inline: 0.6rem;
+@value v-padding-block: 0.8rem;
+@value v-font-size-3: 1.17em;
+@value v-background-light-gray: rgb(246, 246, 246);
+@value v-border-gray: rgb(204, 204, 204);
+@value v-border-radius: 0.4rem;
+@value v-white: rgb(255, 255, 255);

@@ -2,11 +2,11 @@
   "name": "qemu-gui",
   "version": "1.0.0",
   "description": "A web-based QEMU interface",
-  "main": "server/index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "node server/index.js",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server/index.js"
+    "start": "NODE_ENV=production node server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/slowtacocar/qemu-gui#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "multer": "^1.4.2",
     "next": "^9.5.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

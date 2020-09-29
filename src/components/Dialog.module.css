@@ -1,0 +1,12 @@
+@value v-border-gray, v-border-radius from "../values.module.css";
+
+.dialog {
+  position: fixed;
+  top: 50%;
+  border: 1px solid v-border-gray;
+  border-radius: v-border-radius;
+  transform: translate(0, -50%);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 40rem;
+}

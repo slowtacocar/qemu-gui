@@ -1,0 +1,45 @@
+@value v-black, v-background-gray, v-padding-inline, v-padding-block, v-font-size-3 from "../values.module.css";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif;
+}
+
+.navbar {
+  background: v-black;
+  color: v-background-gray;
+  padding: v-padding-block;
+}
+
+.title {
+  font-weight: 700;
+  font-size: v-font-size-3;
+}
+
+.title,
+.link {
+  padding: v-padding-inline;
+}
+
+.links,
+.navbar {
+  display: flex;
+  gap: v-padding-block;
+  align-items: center;
+}
+
+.links {
+  margin-left: auto;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.main {
+  flex-grow: 1;
+  height: 0;
+}

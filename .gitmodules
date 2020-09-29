@@ -1,0 +1,6 @@
+[submodule "websockify"]
+	path = websockify
+	url = https://github.com/novnc/websockify.git
+[submodule "spice-html5"]
+	path = spice-html5
+	url = https://gitlab.freedesktop.org/spice/spice-html5.git

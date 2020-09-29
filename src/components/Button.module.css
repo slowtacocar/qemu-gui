@@ -1,0 +1,26 @@
+@value v-padding-inline, v-border-radius, v-padding-block from "../values.module.css";
+
+.button {
+  padding: v-padding-inline;
+  border-radius: v-border-radius;
+  transition: filter 0.15s;
+  font: inherit;
+  color: inherit;
+  display: block;
+}
+
+.margin {
+  composes: button;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.noMargin {
+  composes: button;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button:hover {
+  filter: brightness(90%);
+}

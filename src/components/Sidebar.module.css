@@ -1,0 +1,29 @@
+@value v-background-gray, v-padding-block from "../values.module.css";
+
+.container {
+  height: 100%;
+}
+
+.paneContainer {
+  composes: container;
+  display: flex;
+}
+
+.paneContainer .pane {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.pane {
+  padding: v-padding-block;
+}
+
+.sidebar {
+  composes: pane;
+  background: v-background-gray;
+}
+
+.scroll {
+  height: 100%;
+  overflow-y: auto;
+}
