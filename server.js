@@ -129,6 +129,12 @@ app.prepare().then(() => {
           processes[req.params.vm][2] = false;
           processes[req.params.vm][1].kill();
         });
+        processes[req.params.vm][0].stdout.on('data', (data) => {
+          console.log(`qemu-system-x86_64: ${data}`);
+        });
+        processes[req.params.vm][0].stderr.on('data', (data) => {
+          console.error(`qemu-system-x86_64: ${data}`);
+        });
         args = [
           parseInt(json.port, 10) - 100,
           `localhost:${json.port}`,
@@ -138,7 +144,12 @@ app.prepare().then(() => {
           "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
         ];
         processes[req.params.vm][1] = spawn("websockify", args);
-        
+        processes[req.params.vm][1].stdout.on('data', (data) => {
+          console.log(`websockify: ${data}`);
+        });
+        processes[req.params.vm][1].stderr.on('data', (data) => {
+          console.error(`websockify: ${data}`);
+        });
         processes[req.params.vm][1].on("close", () => {
           processes[req.params.vm][2] = false;
           processes[req.params.vm][0].kill();
