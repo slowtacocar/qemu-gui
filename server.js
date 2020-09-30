@@ -138,6 +138,15 @@ app.prepare().then(() => {
           "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
         ];
         processes[req.params.vm][1] = spawn("websockify", args);
+        
+        processes[req.params.vm][1].stdout.on("data', (data) => {
+          console.log(`stdout: ${data}`);
+        });
+
+        processes[req.params.vm][1].stderr.on("data', (data) => {
+          console.log(`stderr: ${data}`);
+        });
+        
         processes[req.params.vm][1].on("close", () => {
           processes[req.params.vm][2] = false;
           processes[req.params.vm][0].kill();
