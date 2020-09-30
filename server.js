@@ -63,6 +63,7 @@ app.prepare().then(() => {
         memory: req.query.memory,
         port: req.query.port,
         password: req.query.password,
+        cores: req.query.cores,
       }),
       (err) => {
         if (err) {
@@ -102,7 +103,7 @@ app.prepare().then(() => {
           processes[req.params.vm][1].kill();
         }
         const json = JSON.parse(data);
-        let args = ["--enable-kvm"];
+        let args = ["--enable-kvm", "-cpu", "host"];
         if (json.hda !== "") {
           args.push("-hda");
           args.push(path.join(__dirname, "disks", json.hda));
@@ -122,6 +123,10 @@ app.prepare().then(() => {
               json.password !== "" ? `,password=${json.password}` : ""
             }`
           );
+        }
+        if (json.cores !== "") {
+          args.push("-smp");
+          args.push(json.cores);
         }
         processes[req.params.vm] = [];
         processes[req.params.vm][0] = spawn("qemu-system-x86_64", args);
