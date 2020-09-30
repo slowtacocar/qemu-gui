@@ -2,6 +2,7 @@ FROM node
 WORKDIR /usr/src/app
 COPY package.json .
 RUN apt-get update && apt-get install -y qemu-system-x86
+RUN npm run build
 RUN npm install
 EXPOSE 8443
 EXPOSE 8080
