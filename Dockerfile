@@ -1,5 +1,5 @@
 FROM node
-RUN apt-get update && apt-get install -y qemu-system-x86 python python-setuptools git
+RUN apt-get update && apt-get install -y qemu-system-x86 git
 RUN git clone https://github.com/novnc/websockify.git
 RUN cd websockify && python setup.py install
 WORKDIR /usr/src/app
