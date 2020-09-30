@@ -254,8 +254,6 @@ app.prepare().then(() => {
     });
   });
 
-  server.use(express.static("spice-web-client"));
-
   server.all("*", handle);
   app;
 
