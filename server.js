@@ -118,9 +118,9 @@ app.prepare().then(() => {
         if (json.port !== "") {
           args.push("-spice");
           args.push(
-            `port=${parseInt(json.port, 10) - 100},tls-port=${json.port}${
+            `port=${json.port}${
               json.password !== "" ? `,password=${json.password}` : ""
-            },x509-cert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/cert.pem,x509-key-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem,x509-cacert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/chain.pem`
+            }`
           );
         }
         processes[req.params.vm] = [];
@@ -130,8 +130,8 @@ app.prepare().then(() => {
           processes[req.params.vm][1].kill();
         });
         args = [
-          json.port,
-          `localhost:${parseInt(json.port, 10) - 100}`,
+          parseInt(json.port, 10) - 100,
+          `localhost:${json.port}`,
           "--cert",
           "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
           "--key",
