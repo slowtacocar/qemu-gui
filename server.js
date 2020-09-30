@@ -113,6 +113,8 @@ app.prepare().then(() => {
           "spicevmc,name=vdagent,id=vdagent",
           "-device",
           "virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0",
+          "-vga",
+          "qxl",
         ];
         if (json.hda !== "") {
           args.push("-hda");
