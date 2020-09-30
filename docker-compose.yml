@@ -1,0 +1,16 @@
+services:
+  qemu-gui:
+    build: .
+    restart: always
+    privileged: true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "5900-5999:5900-5999"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - vms:/usr/src/app/vms
+      - disks:/usr/src/app/disks
+volumes:
+  vms: {}
+  disks: {}
