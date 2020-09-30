@@ -231,6 +231,6 @@ app.prepare().then(() => {
       },
       server
     )
-    .listen(8443);
-  http.createServer(server).listen(8080);
+    .listen(443);
+  http.createServer(server).listen(80);
 });
