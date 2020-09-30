@@ -1,3 +1,0 @@
-[submodule "spice-web-client"]
-	path = spice-web-client
-	url = https://github.com/eyeos/spice-web-client.git
