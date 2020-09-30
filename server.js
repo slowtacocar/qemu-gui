@@ -117,12 +117,12 @@ app.prepare().then(() => {
           "qxl",
         ];
         if (json.hda !== "") {
-          args.push("-hda");
-          args.push(path.join(__dirname, "disks", json.hda));
+          args.push("-drive");
+          args.push(`file=${path.join(__dirname, "disks", json.hda)},format=raw,media=disk,if=virtio`);
         }
         if (json.cdrom !== "") {
-          args.push("-cdrom");
-          args.push(path.join(__dirname, "disks", json.cdrom));
+          args.push("-drive");
+          args.push(`file=${path.join(__dirname, "disks", json.cdrom)},format=raw,media=cdrom,if=virtio`);
         }
         if (json.memory !== "") {
           args.push("-m");
