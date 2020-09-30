@@ -8,4 +8,4 @@ RUN npm install
 RUN npm run build
 EXPOSE 8443
 EXPOSE 8080
-CMD [ "npm", "start" ]
+CMD [ "python3", "--version" ]
