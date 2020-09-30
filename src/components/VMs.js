@@ -114,7 +114,7 @@ function VMs() {
               method="dialog"
               onSubmit={async (event) => {
                 await fetch(
-                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}`,
+                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}`,
                   { method: "PUT" }
                 );
                 updateVMs();
@@ -154,6 +154,12 @@ function VMs() {
                 <label>
                   SPICE Password:
                   <input type="text" name="password" />
+                </label>
+              </p>
+              <p>
+                <label>
+                  Cores:
+                  <input type="text" name="cores" />
                 </label>
               </p>
               <p>
