@@ -130,7 +130,7 @@ app.prepare().then(() => {
           processes[req.params.vm][1].kill();
         });
         args = [
-          parseInt(json.port, 10) + 3000,
+          parseInt(json.port, 10) + 8000,
           `localhost:${parseInt(json.port, 10) - 1000}`,
           "--cert",
           "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
@@ -230,6 +230,6 @@ app.prepare().then(() => {
       },
       server
     )
-    .listen(443);
-  http.createServer(server).listen(80);
+    .listen(8443);
+  http.createServer(server).listen(8080);
 });

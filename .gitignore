@@ -1,6 +1,6 @@
 keys.json
-vms
-disks
+vms/*
+disks/*
 
 # Logs
 logs
