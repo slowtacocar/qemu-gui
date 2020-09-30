@@ -80,7 +80,8 @@ app.prepare().then(() => {
         next(err);
       } else {
         if (processes[req.params.vm]) {
-          processes[req.params.vm].kill();
+          processes[req.params.vm][0].kill();
+          processes[req.params.vm][1].kill();
         }
         res.sendStatus(204);
       }
@@ -88,7 +89,7 @@ app.prepare().then(() => {
   });
 
   server.get("/vms/:vm/process", (req, res) => {
-    res.json(!!processes[req.params.vm]);
+    res.json(!!(processes[req.params.vm] && processes[req.params.vm][2]));
   });
 
   server.put("/vms/:vm/process", (req, res, next) => {
@@ -97,20 +98,11 @@ app.prepare().then(() => {
         next(err);
       } else {
         if (processes[req.params.vm]) {
-          processes[req.params.vm].kill();
+          processes[req.params.vm][0].kill();
+          processes[req.params.vm][1].kill();
         }
         const json = JSON.parse(data);
-        let args = [
-          parseInt(json.port, 10) + 8000,
-          `localhost:${parseInt(json.port, 10) - 1000}`,
-          "--cert",
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
-          "--key",
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
-          "--",
-          "qemu-system-x86_64",
-          "--enable-kvm",
-        ];
+        let args = ["--enable-kvm"];
         if (json.hda !== "") {
           args.push("-hda");
           args.push(path.join(__dirname, "disks", json.hda));
@@ -131,10 +123,26 @@ app.prepare().then(() => {
             },x509-cert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/cert.pem,x509-key-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem,x509-cacert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/chain.pem`
           );
         }
-        processes[req.params.vm] = spawn("websockify", args);
-        processes[req.params.vm].on("close", () => {
-          delete processes[req.params.vm];
+        processes[req.params.vm] = [];
+        processes[req.params.vm][0] = spawn("qemu-system-x86_64", args);
+        processes[req.params.vm][0].on("close", () => {
+          processes[req.params.vm][2] = false;
+          processes[req.params.vm][1].kill();
         });
+        args = [
+          parseInt(json.port, 10) + 8000,
+          `localhost:${parseInt(json.port, 10) - 1000}`,
+          "--cert",
+          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
+          "--key",
+          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+        ];
+        processes[req.params.vm][1] = spawn("websockify", args);
+        processes[req.params.vm][1].on("close", () => {
+          processes[req.params.vm][2] = false;
+          processes[req.params.vm][0].kill();
+        });
+        processes[req.params.vm][2] = true;
         res.sendStatus(201);
       }
     });
@@ -142,7 +150,9 @@ app.prepare().then(() => {
 
   server.delete("/vms/:vm/process", (req, res) => {
     if (processes[req.params.vm]) {
-      processes[req.params.vm].kill();
+      processes[req.params.vm][0].kill();
+      processes[req.params.vm][1].kill();
+      processes[req.params.vm][2] = false;
     }
     res.sendStatus(204);
   });
