@@ -27,7 +27,7 @@ app.prepare().then(() => {
   });
 
   server.use(function (req, res, next) {
-    if (req.header("Authorization") === keys.header) {
+    if (req.header("Authorization") === keys.key) {
       next();
     } else {
       res.header("WWW-Authenticate", 'Basic realm="QEMU GUI"').sendStatus(401);
