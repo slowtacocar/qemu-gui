@@ -118,11 +118,23 @@ app.prepare().then(() => {
         ];
         if (json.hda !== "") {
           args.push("-drive");
-          args.push(`file=${path.join(__dirname, "disks", json.hda)},format=raw,media=disk,if=virtio`);
+          args.push(
+            `file=${path.join(
+              __dirname,
+              "disks",
+              json.hda
+            )},format=raw,media=disk,if=virtio`
+          );
         }
         if (json.cdrom !== "") {
           args.push("-drive");
-          args.push(`file=${path.join(__dirname, "disks", json.cdrom)},format=raw,media=cdrom,if=virtio`);
+          args.push(
+            `file=${path.join(
+              __dirname,
+              "disks",
+              json.cdrom
+            )},format=raw,media=cdrom,if=virtio`
+          );
         }
         if (json.memory !== "") {
           args.push("-m");
@@ -146,10 +158,10 @@ app.prepare().then(() => {
           processes[req.params.vm][2] = false;
           processes[req.params.vm][1].kill();
         });
-        processes[req.params.vm][0].stdout.on('data', (data) => {
+        processes[req.params.vm][0].stdout.on("data", (data) => {
           console.log(`qemu-system-x86_64: ${data}`);
         });
-        processes[req.params.vm][0].stderr.on('data', (data) => {
+        processes[req.params.vm][0].stderr.on("data", (data) => {
           console.error(`qemu-system-x86_64: ${data}`);
         });
         args = [
@@ -161,10 +173,10 @@ app.prepare().then(() => {
           "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
         ];
         processes[req.params.vm][1] = spawn("websockify", args);
-        processes[req.params.vm][1].stdout.on('data', (data) => {
+        processes[req.params.vm][1].stdout.on("data", (data) => {
           console.log(`websockify: ${data}`);
         });
-        processes[req.params.vm][1].stderr.on('data', (data) => {
+        processes[req.params.vm][1].stderr.on("data", (data) => {
           console.error(`websockify: ${data}`);
         });
         processes[req.params.vm][1].on("close", () => {
@@ -242,7 +254,7 @@ app.prepare().then(() => {
     });
   });
 
-  server.use(express.static("spice-html5"));
+  server.use(express.static("spice-web-client"));
 
   server.all("*", handle);
   app;
