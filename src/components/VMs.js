@@ -114,7 +114,7 @@ function VMs() {
               method="dialog"
               onSubmit={async (event) => {
                 await fetch(
-                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}`,
+                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}&virtio=${event.target.virtio.value}`,
                   { method: "PUT" }
                 );
                 updateVMs();
@@ -135,7 +135,7 @@ function VMs() {
               <p>
                 <label>
                   Enable virtio disk:
-                  <select name="vdagent">
+                  <select name="virtio">
                     <option value="">No</option>
                     <option value="true">Yes</option>
                   </select>
