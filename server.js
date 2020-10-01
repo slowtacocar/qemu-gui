@@ -60,6 +60,7 @@ app.prepare().then(() => {
       JSON.stringify({
         hda: req.query.hda,
         cdrom: req.query.cdrom,
+        cdrom2: req.query.cdrom2,
         memory: req.query.memory,
         port: req.query.port,
         password: req.query.password,
@@ -135,6 +136,16 @@ app.prepare().then(() => {
               __dirname,
               "disks",
               json.cdrom
+            )},format=raw,media=cdrom`
+          );
+        }
+        if (json.cdrom2) {
+          args.push("-drive");
+          args.push(
+            `file=${path.join(
+              __dirname,
+              "disks",
+              json.cdrom2
             )},format=raw,media=cdrom`
           );
         }

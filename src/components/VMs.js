@@ -114,7 +114,7 @@ function VMs() {
               method="dialog"
               onSubmit={async (event) => {
                 await fetch(
-                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}&virtio=${event.target.virtio.value}`,
+                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&cdrom2=${event.target.cdrom2.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}&virtio=${event.target.virtio.value}`,
                   { method: "PUT" }
                 );
                 updateVMs();
@@ -145,6 +145,12 @@ function VMs() {
                 <label>
                   CD ROM:
                   <input type="text" name="cdrom" />
+                </label>
+              </p>
+              <p>
+                <label>
+                  CD ROM 2:
+                  <input type="text" name="cdrom2" />
                 </label>
               </p>
               <p>
