@@ -106,10 +106,10 @@ const processes = {
 app.prepare().then(() => {
   const server = express();
 
-  //  server.use(function (req, res, next) {
-  //    if (req.secure) next();
-  //    else res.redirect("https://" + req.headers.host + req.url);
-  //  });
+  server.use(function (req, res, next) {
+    if (req.secure) next();
+    else res.redirect("https://" + req.headers.host + req.url);
+  });
 
   server.use(function (req, res, next) {
     if (req.header("Authorization") === keys.key) next();
@@ -240,18 +240,18 @@ app.prepare().then(() => {
   server.all("*", handle);
   app;
 
-  //  https
-  //    .createServer(
-  //      {
-  //        key: fs.readFileSync(
-  //          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem"
-  //        ),
-  //        cert: fs.readFileSync(
-  //          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem"
-  //        ),
-  //      },
-  //      server
-  //    )
-  //    .listen(443);
+  https
+    .createServer(
+      {
+        key: fs.readFileSync(
+          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem"
+        ),
+        cert: fs.readFileSync(
+          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem"
+        ),
+      },
+      server
+    )
+    .listen(443);
   http.createServer(server).listen(80);
 });
