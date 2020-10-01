@@ -172,7 +172,7 @@ function VMs() {
       ) : (
         "Loading..."
       )}
-      {selected && <VM selected={selected} />}
+      {selected && <VM selected={selected} vmFeatures={vmFeatures} />}
     </Sidebar>
   );
 }

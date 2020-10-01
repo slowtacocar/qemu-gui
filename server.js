@@ -73,12 +73,12 @@ const processes = {
       for (let i = 0; i < this.processes[key].length - 1; i++) {
         processes[key][i].kill();
       }
+      this.processes[key][this.processes[key].length - 1] = false;
     }
-    this.processes[key][this.processes.length - 1] = false;
   },
   running: function (key) {
     return !!(
-      this.processes[key] && this.processes[key][this.processes.length - 1]
+      this.processes[key] && this.processes[key][this.processes[key].length - 1]
     );
   },
   spawn: function (key, command, args) {

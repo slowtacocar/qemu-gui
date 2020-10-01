@@ -4,18 +4,6 @@ import Form from "./Form";
 import Button from "./Button";
 import { useFetch } from "../hooks";
 
-const vmFeatures = [
-  { name: "hda", displayName: "Hard Drive" },
-  { name: "cdrom", displayName: "CD ROM 1" },
-  { name: "cdrom2", displayName: "CD ROM 2" },
-  { name: "memory", displayName: "Memory" },
-  { name: "port", displayName: "SPICE Port" },
-  { name: "password", displayName: "SPICE Password" },
-  { name: "cores", displayName: "Cores" },
-  { name: "vdagent", displayName: "Enable Vdagent" },
-  { name: "virtio", displayName: "Enable Virtio" },
-];
-
 function VM(props) {
   const [vm, updateVM] = useFetch(`vms/${props.selected}`);
   const [values, updateValues] = React.useState({});
@@ -27,7 +15,7 @@ function VM(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         await fetch(
-          `vms/${props.selected}?${vmFeatures
+          `vms/${props.selected}?${props.vmFeatures
             .map((feature) => `${feature.name}=${values[feature.name]}`)
             .join("&")}`,
           { method: "PUT" }
@@ -37,7 +25,7 @@ function VM(props) {
     >
       <Table>
         <></>
-        {vmFeatures.map((feature) => (
+        {props.vmFeatures.map((feature) => (
           <tr key={feature.name}>
             <th scope="row">{feature.displayName}</th>
             <td>
@@ -69,6 +57,12 @@ function VM(props) {
 
 VM.propTypes = {
   selected: PropTypes.string,
+  vmFeatures: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      displayName: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
 };
 
 export default VM;
