@@ -63,7 +63,7 @@ function VMs() {
                         });
                         const json = await response.json();
                         open(
-                          `spice_auto.html?port=${
+                          `spice-html5/spice_auto.html?port=${
                             parseInt(json.port, 10) - 100
                           }`,
                           "_blank"
