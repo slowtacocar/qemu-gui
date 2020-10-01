@@ -64,6 +64,7 @@ app.prepare().then(() => {
         port: req.query.port,
         password: req.query.password,
         cores: req.query.cores,
+        vdagent: req.query.vdagent,
       }),
       (err) => {
         if (err) {
@@ -104,7 +105,19 @@ app.prepare().then(() => {
         }
         const json = JSON.parse(data);
         let args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
-        if (json.hda !== "") {
+        if (json.vdagent) {
+          args.push("-device");
+          args.push(
+            "virtio-serial-pci,id=virtio-serial0,max_ports=16,bus=pci.0,addr=0x5"
+          );
+          args.push("-chardev");
+          args.push("spicevmc,name=vdagent,id=vdagent");
+          args.push("-device");
+          args.push(
+            "virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0"
+          );
+        }
+        if (json.hda) {
           args.push("-drive");
           args.push(
             `file=${path.join(
@@ -114,7 +127,7 @@ app.prepare().then(() => {
             )},format=raw,media=disk,if=virtio`
           );
         }
-        if (json.cdrom !== "") {
+        if (json.cdrom) {
           args.push("-drive");
           args.push(
             `file=${path.join(
@@ -124,19 +137,19 @@ app.prepare().then(() => {
             )},format=raw,media=cdrom,if=virtio`
           );
         }
-        if (json.memory !== "") {
+        if (json.memory) {
           args.push("-m");
           args.push(json.memory);
         }
-        if (json.port !== "") {
+        if (json.port) {
           args.push("-spice");
           args.push(
             `port=${json.port}${
-              json.password !== "" ? `,password=${json.password}` : ""
+              json.password ? `,password=${json.password}` : ""
             }`
           );
         }
-        if (json.cores !== "") {
+        if (json.cores) {
           args.push("-smp");
           args.push(json.cores);
         }

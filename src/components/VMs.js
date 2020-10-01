@@ -114,7 +114,7 @@ function VMs() {
               method="dialog"
               onSubmit={async (event) => {
                 await fetch(
-                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}`,
+                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}`,
                   { method: "PUT" }
                 );
                 updateVMs();
@@ -160,6 +160,15 @@ function VMs() {
                 <label>
                   Cores:
                   <input type="text" name="cores" />
+                </label>
+              </p>
+              <p>
+                <label>
+                  Enable vdagent:
+                  <select name="vdagent">
+                    <option value="">No</option>
+                    <option value="true">Yes</option>
+                  </select>
                 </label>
               </p>
               <p>
