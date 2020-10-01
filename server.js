@@ -103,19 +103,7 @@ app.prepare().then(() => {
           processes[req.params.vm][1].kill();
         }
         const json = JSON.parse(data);
-        let args = [
-          "--enable-kvm",
-          "-cpu",
-          "host",
-          "-device",
-          "virtio-serial-pci,id=virtio-serial0,max_ports=16,bus=pci.0,addr=0x5",
-          "-chardev",
-          "spicevmc,name=vdagent,id=vdagent",
-          "-device",
-          "virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0",
-          "-vga",
-          "qxl",
-        ];
+        let args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
         if (json.hda !== "") {
           args.push("-drive");
           args.push(
