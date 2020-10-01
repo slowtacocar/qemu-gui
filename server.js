@@ -64,6 +64,7 @@ const vmFeatures = [
     ],
   },
   { name: "virtio", args: () => [] },
+  { name: "enlightenments", args: () => [] },
 ];
 
 const processes = {
@@ -163,7 +164,17 @@ app.prepare().then(() => {
       else {
         processes.kill(req.params.vm);
         const json = JSON.parse(data);
-        let args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
+        let args = [
+          "--enable-kvm",
+          "-cpu",
+          `host${
+            json.enlightenments
+              ? ",hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time"
+              : ""
+          }`,
+          "-vga",
+          "qxl",
+        ];
         for (const feature of vmFeatures) {
           if (json[feature.name]) {
             args = [...args, ...feature.args(json[feature.name], json)];

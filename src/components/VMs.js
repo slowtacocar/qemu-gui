@@ -22,6 +22,10 @@ const vmFeatures = [
     name: "virtio",
     displayName: "Enable Virtio (leave this empty to disable)",
   },
+  {
+    name: "enlightenments",
+    displayName: "Enable Enlightenments (leave this empty to disable)",
+  },
 ];
 
 function VMs() {
