@@ -134,7 +134,7 @@ app.prepare().then(() => {
               __dirname,
               "disks",
               json.cdrom
-            )},format=raw,media=cdrom,if=virtio`
+            )},format=raw,media=cdrom`
           );
         }
         if (json.memory) {
