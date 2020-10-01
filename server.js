@@ -165,11 +165,11 @@ app.prepare().then(() => {
         const json = JSON.parse(data);
         const args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
         for (const feature of vmFeatures) {
+          console.log(feature);
           if (json[feature.name]) {
             args.concat(feature.args(json[feature.name], json));
           }
         }
-        console.log(args);
         processes.newProcess(req.params.vm, [
           ["qemu-system-x86_64", args],
           [
