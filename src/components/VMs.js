@@ -6,6 +6,24 @@ import Dialog from "./Dialog";
 import Form from "./Form";
 import { useFetch, useFetchAll } from "../hooks";
 
+const vmFeatures = [
+  { name: "hda", displayName: "Hard Drive" },
+  { name: "cdrom", displayName: "CD ROM 1" },
+  { name: "cdrom2", displayName: "CD ROM 2" },
+  { name: "memory", displayName: "Memory" },
+  { name: "port", displayName: "SPICE Port" },
+  { name: "password", displayName: "SPICE Password" },
+  { name: "cores", displayName: "Cores" },
+  {
+    name: "vdagent",
+    displayName: "Enable Vdagent (leave this empty to disable)",
+  },
+  {
+    name: "virtio",
+    displayName: "Enable Virtio (leave this empty to disable)",
+  },
+];
+
 function VMs() {
   const [vms, updateVMs] = useFetch("vms");
   const [processes] = useFetchAll("vms", vms, "process");
@@ -114,7 +132,12 @@ function VMs() {
               method="dialog"
               onSubmit={async (event) => {
                 await fetch(
-                  `vms/${event.target.name.value}?hda=${event.target.hda.value}&cdrom=${event.target.cdrom.value}&cdrom2=${event.target.cdrom2.value}&memory=${event.target.memory.value}&port=${event.target.port.value}&password=${event.target.password.value}&cores=${event.target.cores.value}&vdagent=${event.target.vdagent.value}&virtio=${event.target.virtio.value}`,
+                  `vms/${event.target.name.value}?${vmFeatures
+                    .map(
+                      (feature) =>
+                        `${feature.name}=${event.target[feature.name].value}`
+                    )
+                    .join("&")}`,
                   { method: "PUT" }
                 );
                 updateVMs();
@@ -126,66 +149,14 @@ function VMs() {
                   <input type="text" name="name" />
                 </label>
               </p>
-              <p>
-                <label>
-                  Hard Drive:
-                  <input type="text" name="hda" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  Enable virtio disk:
-                  <select name="virtio">
-                    <option value="">No</option>
-                    <option value="true">Yes</option>
-                  </select>
-                </label>
-              </p>
-              <p>
-                <label>
-                  CD ROM:
-                  <input type="text" name="cdrom" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  CD ROM 2:
-                  <input type="text" name="cdrom2" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  Memory:
-                  <input type="text" name="memory" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  SPICE Port:
-                  <input type="text" name="port" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  SPICE Password:
-                  <input type="text" name="password" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  Cores:
-                  <input type="text" name="cores" />
-                </label>
-              </p>
-              <p>
-                <label>
-                  Enable vdagent:
-                  <select name="vdagent">
-                    <option value="">No</option>
-                    <option value="true">Yes</option>
-                  </select>
-                </label>
-              </p>
+              {vmFeatures.map((feature) => (
+                <p key={feature.name}>
+                  <label>
+                    {feature.displayName}:
+                    <input type="text" name={feature.name} />
+                  </label>
+                </p>
+              ))}
               <p>
                 {" "}
                 <Button

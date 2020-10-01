@@ -4,15 +4,31 @@ import Form from "./Form";
 import Button from "./Button";
 import { useFetch } from "../hooks";
 
+const vmFeatures = [
+  { name: "hda", displayName: "Hard Drive" },
+  { name: "cdrom", displayName: "CD ROM 1" },
+  { name: "cdrom2", displayName: "CD ROM 2" },
+  { name: "memory", displayName: "Memory" },
+  { name: "port", displayName: "SPICE Port" },
+  { name: "password", displayName: "SPICE Password" },
+  { name: "cores", displayName: "Cores" },
+  { name: "vdagent", displayName: "Enable Vdagent" },
+  { name: "virtio", displayName: "Enable Virtio" },
+];
+
 function VM(props) {
   const [vm, updateVM] = useFetch(`vms/${props.selected}`);
+  const [values, updateValues] = React.useState({});
+  React.useEffect(() => {
+    updateValues(vm || {});
+  }, [vm]);
   return vm ? (
     <Form
       onSubmit={async (event) => {
         event.preventDefault();
         await fetch(
-          `vms/${props.selected}?${Object.keys(vm)
-            .map((key) => `${key}=${event.target[key].value}`)
+          `vms/${props.selected}?${vmFeatures
+            .map((feature) => `${feature.name}=${values[feature.name]}`)
             .join("&")}`,
           { method: "PUT" }
         );
@@ -21,11 +37,21 @@ function VM(props) {
     >
       <Table>
         <></>
-        {Object.keys(vm).map((key) => (
-          <tr key={key}>
-            <th scope="row">{key}</th>
+        {vmFeatures.map((feature) => (
+          <tr key={feature.name}>
+            <th scope="row">{feature.displayName}</th>
             <td>
-              <input type="text" defaultValue={vm[key]} name={key} />
+              <input
+                type="text"
+                value={values[feature.name] || ""}
+                name={feature.name}
+                onChange={(event) => {
+                  updateValues({
+                    ...values,
+                    [event.target.name]: event.target.value,
+                  });
+                }}
+              />
             </td>
           </tr>
         ))}
