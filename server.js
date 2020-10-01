@@ -65,6 +65,7 @@ app.prepare().then(() => {
         password: req.query.password,
         cores: req.query.cores,
         vdagent: req.query.vdagent,
+        virtio: req.query.virtio,
       }),
       (err) => {
         if (err) {
@@ -124,7 +125,7 @@ app.prepare().then(() => {
               __dirname,
               "disks",
               json.hda
-            )},format=raw,media=disk,if=virtio`
+            )},format=raw,media=disk${json.virtio ? ",if=virtio" : ""}`
           );
         }
         if (json.cdrom) {

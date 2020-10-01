@@ -134,6 +134,15 @@ function VMs() {
               </p>
               <p>
                 <label>
+                  Enable virtio disk:
+                  <select name="vdagent">
+                    <option value="">No</option>
+                    <option value="true">Yes</option>
+                  </select>
+                </label>
+              </p>
+              <p>
+                <label>
                   CD ROM:
                   <input type="text" name="cdrom" />
                 </label>
