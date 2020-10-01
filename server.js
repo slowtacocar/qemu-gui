@@ -61,6 +61,7 @@ const vmFeatures = [
       "spicevmc,name=vdagent,id=vdagent",
       "-device",
       "virtserialport,nr=1,bus=virtio-serial0.0,chardev=vdagent,name=com.redhat.spice.0",
+      console.log("hi"),
     ],
   },
   { name: "virtio", args: () => [] },
@@ -165,7 +166,6 @@ app.prepare().then(() => {
         const json = JSON.parse(data);
         const args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
         for (const feature of vmFeatures) {
-          console.log(feature);
           if (json[feature.name]) {
             args.concat(feature.args(json[feature.name], json));
           }
