@@ -71,7 +71,7 @@ const processes = {
   kill: function (key) {
     if (this.processes[key]) {
       for (let i = 0; i < this.processes[key].length - 1; i++) {
-        processes[key][i].kill();
+        this.processes[key][i].kill();
       }
       this.processes[key][this.processes[key].length - 1] = false;
     }
@@ -169,6 +169,7 @@ app.prepare().then(() => {
             args.concat(feature.args(json[feature.name], json));
           }
         }
+        console.log(args);
         processes.newProcess(req.params.vm, [
           ["qemu-system-x86_64", args],
           [
