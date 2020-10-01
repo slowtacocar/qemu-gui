@@ -166,7 +166,7 @@ app.prepare().then(() => {
         let args = ["--enable-kvm", "-cpu", "host", "-vga", "qxl"];
         for (const feature of vmFeatures) {
           if (json[feature.name]) {
-            args = [...args, feature.args(json[feature.name], json)];
+            args = [...args, ...feature.args(json[feature.name], json)];
           }
         }
         processes.newProcess(req.params.vm, [
