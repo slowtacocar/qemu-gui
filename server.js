@@ -10,6 +10,7 @@ const { exec, spawn } = require("child_process");
 const keys = require("./keys.json");
 
 const dev = process.env.NODE_ENV !== "production";
+const tls = true;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -18,40 +19,38 @@ const vmFeatures = [
     name: "hda",
     args: (query, fullQuery) => [
       "-drive",
-      `file=${path.join(__dirname, "disks", query)},format=raw,media=disk${
-        fullQuery.virtio ? ",if=virtio" : ""
-      }`,
+      `file=disks/${query}` +
+        ",format=raw" +
+        ",media=disk" +
+        (fullQuery.virtio && ",if=virtio"),
     ],
   },
   {
     name: "cdrom",
-    args: (query) => [
-      "-drive",
-      `file=${path.join(__dirname, "disks", query)},format=raw,media=cdrom`,
-    ],
+    args: (query) => ["-drive", `file=disks/${query},format=raw,media=cdrom`],
   },
   {
     name: "cdrom2",
-    args: (query) => [
-      "-drive",
-      `file=${path.join(__dirname, "disks", query)},format=raw,media=cdrom`,
-    ],
+    args: (query) => ["-drive", `file=disks/${query},format=raw,media=cdrom`],
   },
   { name: "memory", args: (query) => ["-m", query] },
+  { name: "port", args: () => [] },
+  { name: "tlsport", args: () => [] },
+  { name: "wssport", args: () => [] },
   {
-    name: "port",
+    name: "password",
     args: (query, fullQuery) => [
       "-spice",
-      `port=${query}${
-        fullQuery.password ? `,password=${fullQuery.password}` : ""
-      }`,
+      `password=${query}` +
+        (fullQuery.port && `,port=${fullQuery.port}`) +
+        (fullQuery.tlsport &&
+          `,tls-port=${fullQuery.tlsport}` +
+            ",x509-cert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/cert.pem" +
+            ",x509-key-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem" +
+            ",x509-cacert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/chain.pem"),
     ],
   },
-  { name: "password", args: () => [] },
-  {
-    name: "cores",
-    args: (query) => ["-smp", `cores=${query}`],
-  },
+  { name: "cores", args: (query) => ["-smp", `cores=${query}`] },
   {
     name: "vdagent",
     args: () => [
@@ -107,10 +106,12 @@ const processes = {
 app.prepare().then(() => {
   const server = express();
 
-  server.use(function (req, res, next) {
-    if (req.secure) next();
-    else res.redirect("https://" + req.headers.host + req.url);
-  });
+  if (tls) {
+    server.use(function (req, res, next) {
+      if (req.secure) next();
+      else res.redirect("https://" + req.headers.host + req.url);
+    });
+  }
 
   server.use(function (req, res, next) {
     if (req.header("Authorization") === keys.key) next();
@@ -167,11 +168,9 @@ app.prepare().then(() => {
         let args = [
           "--enable-kvm",
           "-cpu",
-          `host${
-            json.enlightenments
-              ? ",hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time"
-              : ""
-          }`,
+          "host" +
+            (json.enlightenments &&
+              ",hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time"),
           "-vga",
           "qxl",
         ];
@@ -185,12 +184,16 @@ app.prepare().then(() => {
           [
             "websockify",
             [
-              parseInt(json.port, 10) - 100,
+              json.wssport,
               `localhost:${json.port}`,
-              "--cert",
-              "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
-              "--key",
-              "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+              ...(tls
+                ? [
+                    "--cert",
+                    "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
+                    "--key",
+                    "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+                  ]
+                : []),
             ],
           ],
         ]);
@@ -217,11 +220,7 @@ app.prepare().then(() => {
 
   server.get("/disks/:disk", (req, res, next) => {
     exec(
-      `qemu-img info --output=json "${path.join(
-        __dirname,
-        "disks",
-        req.params.disk
-      )}"`,
+      `qemu-img info --output=json "disks/${req.params.disk}"`,
       (err, stdout) => {
         if (err) next(err);
         else res.json(JSON.parse(stdout));
@@ -231,9 +230,7 @@ app.prepare().then(() => {
 
   server.put("/disks/:disk", (req, res, next) => {
     exec(
-      `qemu-img create "${path.join(__dirname, "disks", req.params.disk)}" "${
-        req.query.size
-      }"`,
+      `qemu-img create "disks/${req.params.disk}" "${req.query.size}"`,
       (err, stdout) => {
         if (err) next(err);
         else res.send(stdout);
@@ -242,7 +239,7 @@ app.prepare().then(() => {
   });
 
   server.delete("/disks/:disk", (req, res, next) => {
-    fs.unlink(path.join(__dirname, "appdisks", req.params.disk), (err) => {
+    fs.unlink(path.join(__dirname, "disks", req.params.disk), (err) => {
       if (err) next(err);
       else res.end();
     });
@@ -251,18 +248,20 @@ app.prepare().then(() => {
   server.all("*", handle);
   app;
 
-  https
-    .createServer(
-      {
-        key: fs.readFileSync(
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem"
-        ),
-        cert: fs.readFileSync(
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem"
-        ),
-      },
-      server
-    )
-    .listen(443);
+  if (tls) {
+    https
+      .createServer(
+        {
+          key: fs.readFileSync(
+            "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem"
+          ),
+          cert: fs.readFileSync(
+            "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem"
+          ),
+        },
+        server
+      )
+      .listen(443);
+  }
   http.createServer(server).listen(80);
 });

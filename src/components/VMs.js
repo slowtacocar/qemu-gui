@@ -12,6 +12,8 @@ const vmFeatures = [
   { name: "cdrom2", displayName: "CD ROM 2" },
   { name: "memory", displayName: "Memory" },
   { name: "port", displayName: "SPICE Port" },
+  { name: "tlsport", displayName: "SPICE TLS Port" },
+  { name: "wssport", displayName: "WebSockets SPICE Port" },
   { name: "password", displayName: "SPICE Password" },
   { name: "cores", displayName: "Cores" },
   {
