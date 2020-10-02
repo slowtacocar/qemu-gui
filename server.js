@@ -10,7 +10,7 @@ const { exec, spawn } = require("child_process");
 const keys = require("./keys.json");
 
 const dev = process.env.NODE_ENV !== "production";
-const tls = true;
+const tls = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -173,30 +173,28 @@ app.prepare().then(() => {
               ",hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time"),
           "-vga",
           "qxl",
+          "-soundhw",
+          "hda",
         ];
         for (const feature of vmFeatures) {
           if (json[feature.name]) {
             args = [...args, ...feature.args(json[feature.name], json)];
           }
         }
-        processes.newProcess(req.params.vm, [
-          ["qemu-system-x86_64", args],
-          [
-            "websockify",
-            [
-              json.wssport,
-              `localhost:${json.port}`,
-              ...(tls
-                ? [
-                    "--cert",
-                    "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
-                    "--key",
-                    "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
-                  ]
-                : []),
-            ],
-          ],
-        ]);
+        const spawns = [["qemu-system-x86_64", args]];
+        if (json.wssport) {
+          spawns.push(["websockify", [json.wssport, `localhost:${json.port}`]]);
+          if (tls) {
+            spawns[1][1] = [
+              ...spawns[1][1],
+              "--cert",
+              "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
+              "--key",
+              "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+            ];
+          }
+        }
+        processes.newProcess(req.params.vm, spawns);
         res.sendStatus(201);
       }
     });
