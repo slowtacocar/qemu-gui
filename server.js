@@ -81,13 +81,13 @@ const processes = {
       this.processes[key] && this.processes[key][this.processes[key].length - 1]
     );
   },
-  spawn: function (key, command, args) {
+  spawn: function (key, command, args, logs) {
     const process = spawn(command, args);
     process.stdout.on("data", (data) => {
-      console.log(`${command}: ${data}`);
+      logs += data;
     });
     process.stderr.on("data", (data) => {
-      console.error(`${command}: ${data}`);
+      logs.logs += data;
     });
     process.on("close", () => {
       this.kill(key);
@@ -96,12 +96,15 @@ const processes = {
   },
   newProcess: function (key, commandArgs) {
     this.processes[key] = [];
-    for (const [command, args] of commandArgs) {
-      this.spawn(key, command, args);
+    for (const [command, args, logs] of commandArgs) {
+      this.spawn(key, command, args, logs);
     }
     this.processes[key].push(true);
   },
 };
+
+const qemuLogs = { logs: "" };
+const websockifyLogs = { logs: "" };
 
 app.prepare().then(() => {
   const server = express();
@@ -181,9 +184,13 @@ app.prepare().then(() => {
             args = [...args, ...feature.args(json[feature.name], json)];
           }
         }
-        const spawns = [["qemu-system-x86_64", args]];
+        const spawns = [["qemu-system-x86_64", args, qemuLogs]];
         if (json.wssport) {
-          spawns.push(["websockify", [json.wssport, `localhost:${json.port}`]]);
+          spawns.push([
+            "websockify",
+            [json.wssport, `localhost:${json.port}`],
+            websockifyLogs,
+          ]);
           if (tls) {
             spawns[1][1] = [
               ...spawns[1][1],
@@ -243,8 +250,14 @@ app.prepare().then(() => {
     });
   });
 
+  server.get("/logs", (req, res) => {
+    res.json({
+      qemu: qemuLogs.logs,
+      websockify: websockifyLogs.logs,
+    });
+  });
+
   server.all("*", handle);
-  app;
 
   if (tls) {
     https

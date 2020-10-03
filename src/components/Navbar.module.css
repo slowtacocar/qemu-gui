@@ -1,4 +1,4 @@
-@value v-black, v-background-gray, v-padding-inline, v-padding-block, v-font-size-3 from "../values.module.css";
+@value v-black, v-background-gray, v-padding-inline, v-padding-block, v-font-size-3, v-border-gray, v-border-radius from "../values.module.css";
 
 .container {
   display: flex;
@@ -20,8 +20,33 @@
 }
 
 .title,
-.link {
+.link,
+.dropdownButton {
   padding: v-padding-inline;
+}
+
+.dropdownButton {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: v-black;
+  gap: v-padding-block;
+  align-items: center;
+  flex-direction: column;
+  padding: v-padding-block;
+}
+
+.dropdownContainer:hover .dropdown,
+.dropdown:hover {
+  display: flex;
 }
 
 .links,
@@ -33,6 +58,7 @@
 
 .links {
   margin-left: auto;
+  margin-right: auto;
 }
 
 .link {
