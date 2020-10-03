@@ -10,7 +10,7 @@ const { exec, spawn } = require("child_process");
 const keys = require("./keys.json");
 
 const dev = process.env.NODE_ENV !== "production";
-const tls = true;
+const tls = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
