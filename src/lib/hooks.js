@@ -5,7 +5,7 @@ export function useFetch(resource, init) {
   const [update, setUpdate] = React.useState(() => () => alert("hi"));
   React.useEffect(() => {
     async function getJSON() {
-      const response = await fetch(resource, init);
+      const response = await fetch(`api/${resource}`, init);
       setJSON(await response.json());
     }
 
@@ -23,7 +23,7 @@ export function useFetchAll(prefix, resources, suffix, init) {
       if (resources) {
         const responses = await Promise.all(
           resources.map((resource) =>
-            fetch(`${prefix}/${resource}/${suffix}`, init)
+            fetch(`api/${prefix}/${resource}/${suffix}`, init)
           )
         );
         setJSONs(

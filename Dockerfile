@@ -6,9 +6,8 @@ WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install
 COPY src src
+COPY keys.json .
 RUN npm run build
 RUN rm -r src
 CMD [ "npm", "start" ]
-COPY server.js .
-COPY keys.json .
 COPY public public

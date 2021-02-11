@@ -1,27 +1,27 @@
-import Navbar from "../components/Navbar";
+import { promises as fs } from "fs";
+import path from "path";
 import VMs from "../components/VMs";
-import Disks from "../components/Disks";
-import Logs from "../components/Logs";
-import Restart from "../components/Restart";
+import processes from "../lib/processes";
+import auth from "../lib/auth";
+import SiteNavbar from "../components/SiteNavbar";
 
-export default function Home() {
+export async function getServerSideProps(context) {
+  await auth(context.req, context.res);
+  const vms = await fs.readdir(path.join(process.cwd(), "vms"));
+
+  return {
+    props: {
+      vms: Object.fromEntries(
+        vms.map((vm) => [vm, { running: processes.running(vm) }])
+      ),
+    },
+  };
+}
+
+export default function Home(props) {
   return (
-    <>
-      <style jsx global>{`
-        body {
-          margin: 0px;
-        }
-      `}</style>
-      <Navbar title="QEMU GUI">
-        {[
-          { element: <VMs />, name: "VMs" },
-          { element: <Disks />, name: "Disks" },
-        ]}
-        {[
-          { element: <Logs />, name: "Logs" },
-          { element: <Restart />, name: "Restart Server" },
-        ]}
-      </Navbar>
-    </>
+    <SiteNavbar>
+      <VMs vms={props.vms} />
+    </SiteNavbar>
   );
 }
