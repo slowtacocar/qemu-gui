@@ -1,3 +1,5 @@
+import keys from "../../keys.json";
+
 export default [
   {
     name: "hda",
@@ -32,10 +34,7 @@ export default [
       `password=${query}` +
         (fullQuery.port && `,port=${fullQuery.port}`) +
         (fullQuery.tlsport &&
-          `,tls-port=${fullQuery.tlsport}` +
-            ",x509-cert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/cert.pem" +
-            ",x509-key-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem" +
-            ",x509-cacert-file=/etc/letsencrypt/live/qemu-gui.slowtacocar.com/chain.pem"),
+          `,tls-port=${fullQuery.tlsport},x509-cert-file=${keys.tls.cert},x509-key-file=${keys.tls.key},x509-cacert-file=${keys.tls.cacert}`),
     ],
   },
   {

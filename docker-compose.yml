@@ -4,10 +4,10 @@ services:
     restart: always
     privileged: true
     ports:
-      - "80:3000"
+      - "443:5000"
       - "5800-5999:5800-5999"
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
+      - C:\Certbot:/etc/letsencrypt
       - vms:/usr/src/app/vms
       - disks:/usr/src/app/disks
 volumes:

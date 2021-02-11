@@ -8,22 +8,28 @@ This project is designed to be run on a local server and allows a client to conn
 
 ## Installation Instructions
 
-The whole program can be run under a docker container. So just install docker, clone the repo, and add TLS keys and passwords. 
-
-For TLS keys, you'll need to copy them to the server and change the paths to them in `src/pages/api/vms/[vm]/start.js` and `src/lib/features.js`. If you're not using Let's Encrypt, you'll also need to edit the Docker Compose file to bind-mount a different path. **This only enables TLS on WebSockets and SPICE.**
-
-If you're smart, you'll set up some sort of proxy for HTTPS. I haven't done this yet, but it might get added in the future.
-
-For the password (used for HTTP authentication to the web page), create a file called `keys.json` in the root of the cloned repository that looks something like this:
-
-    { "key": "Basic abcdefghijklmnop", "tls": true }
-
-where `abcdefghijklmnop` is the Base64 encoding of `username:password`.  **You can set `tls` to false to disable TLS (for development or for lazy people).**
-
-Finally, run `sudo docker-compose up` to start the server.
-
-## Building Instructions
-
 Clone the repository (make sure to use `--recurse-submodules` to clone the SPICE client).
 
-Run `npm run dev` to start a development server, or `npm start` for a production server.
+Run `npm run dev` to start a development server, or `npm start` for a production server. If you want a reverse proxy for HTTPS, run `node proxy.js` instead (this starts a production server on port 5000).
+
+## Deployment Instructions
+
+The whole program can be run under a docker container. So just install docker, clone the repo, and add TLS keys and passwords.
+
+First, you'll need to copy your TLS keys to the server. If you're not using Let's Encrypt, you'll also need to edit the Docker Compose file to bind-mount a different path.
+
+Next, create a file called `keys.json` in the root of the cloned repository that looks something like this:
+
+    {
+        "key": "Basic abcdefghijklmnop",
+        "tls": {
+            "key": "/etc/letsencrypt/live/example.com/privkey.pem",
+            "fullchain": "/etc/letsencrypt/live/example.com/fullchain.pem",
+            "cert": "/etc/letsencrypt/live/example.com/cert.pem",
+            "cacert": "/etc/letsencrypt/live/example.com/chain.pem"
+        }
+    }
+
+Replace `abcdefghijklmnop` with the Base64 encoding of `username:password` where `username` and `password` are the username and password you wish to use for HTTP authentication. Also, replace the values under `tls` with paths to the correct TLS keys. **You can remove the `tls` part to disable TLS.**
+
+Finally, run `sudo docker-compose up` to start the server.

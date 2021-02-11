@@ -9,5 +9,6 @@ COPY src src
 COPY keys.json .
 RUN npm run build
 RUN rm -r src
-CMD [ "npm", "start" ]
+CMD [ "node", "proxy.js" ]
 COPY public public
+COPY proxy.js .

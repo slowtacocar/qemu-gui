@@ -40,9 +40,9 @@ export default async function (req, res) {
         spawns[1][1] = [
           ...spawns[1][1],
           "--cert",
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
+          keys.tls.fullchain,
           "--key",
-          "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+          keys.tls.key,
         ];
       }
     }

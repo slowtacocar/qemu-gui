@@ -1,0 +1,9 @@
+{
+  "key": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
+  "tls": {
+    "key": "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/privkey.pem",
+    "fullchain": "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/fullchain.pem",
+    "cert": "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/cert.pem",
+    "cacert": "/etc/letsencrypt/live/qemu-gui.slowtacocar.com/chain.pem"
+  }
+}
