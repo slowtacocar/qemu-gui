@@ -10,11 +10,15 @@ This project is designed to be run on a local server and allows a client to conn
 
 The whole program can be run under a docker container. So just install docker, clone the repo, and add TLS keys and passwords. 
 
-For TLS keys, you'll need to copy them to the server and change the paths to them in `server.js` (they're in quite a few places). If you're not using Let's Encrypt, you'll also need to edit the Docker Compose file to bind-mount a different path. **There is also a variable called `tls` that you can set to false to disable TLS (for development or for lazy people).**
+For TLS keys, you'll need to copy them to the server and change the paths to them in `src/pages/api/vms/[vm]/start.js` and `src/lib/features.js`. If you're not using Let's Encrypt, you'll also need to edit the Docker Compose file to bind-mount a different path. **This only enables TLS on WebSockets and SPICE.**
+
+If you're smart, you'll set up some sort of proxy for HTTPS. I haven't done this yet, but it might get added in the future.
 
 For the password (used for HTTP authentication to the web page), create a file called `keys.json` in the root of the cloned repository that looks something like this:
-    {"key":"Basic abcdefghijklmnop"}
-where `abcdefghijklmnop` is the Base64 encoding of `username:password`.
+
+    { "key": "Basic abcdefghijklmnop", "tls": true }
+
+where `abcdefghijklmnop` is the Base64 encoding of `username:password`.  **You can set `tls` to false to disable TLS (for development or for lazy people).**
 
 Finally, run `sudo docker-compose up` to start the server.
 
