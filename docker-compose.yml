@@ -7,7 +7,7 @@ services:
       - "443:5000"
       - "5800-5999:5800-5999"
     volumes:
-      - C:\Certbot:/etc/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt
       - vms:/usr/src/app/vms
       - disks:/usr/src/app/disks
 volumes:
