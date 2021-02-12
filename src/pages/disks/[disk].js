@@ -2,7 +2,6 @@ import { promises as fs } from "fs";
 import { execSync } from "child_process";
 import path from "path";
 import Disks from "../../components/Disks";
-import { useRouter } from "next/router";
 import auth from "../../lib/auth";
 import SiteNavbar from "../../components/SiteNavbar";
 import Table from "react-bootstrap/Table";
@@ -25,8 +24,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Disk(props) {
-  const router = useRouter();
-
   return (
     <SiteNavbar>
       <Row>

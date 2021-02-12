@@ -10,7 +10,7 @@ export const config = {
   },
 };
 
-export default async function (req, res) {
+async function uploadDisk(req, res) {
   await auth(req, res);
   if (req.method === "POST") {
     await new Promise((resolve) => {
@@ -21,3 +21,5 @@ export default async function (req, res) {
     res.redirect("/disks");
   }
 }
+
+export default uploadDisk;

@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 
-export default {
+const processes = {
   processes: {},
   kill: function (key) {
     if (this.processes[key]) {
@@ -36,3 +36,5 @@ export default {
     this.processes[key].push(true);
   },
 };
+
+export default processes;

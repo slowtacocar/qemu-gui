@@ -2,7 +2,7 @@ import auth from "../../../lib/auth";
 import { promises as fs } from "fs";
 import path from "path";
 
-export default async function (req, res) {
+async function createVM(req, res) {
   await auth(req, res);
   if (req.method === "POST") {
     const vmPath = path.join(process.cwd(), "vms", req.body.name);
@@ -12,3 +12,5 @@ export default async function (req, res) {
     res.redirect("/");
   }
 }
+
+export default createVM;

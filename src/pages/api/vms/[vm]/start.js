@@ -6,7 +6,7 @@ import vmFeatures from "../../../../lib/features";
 import { qemuLogs, websockifyLogs } from "../../../../lib/logs";
 import keys from "../../../../../keys.json";
 
-export default async function (req, res) {
+async function startVM(req, res) {
   await auth(req, res);
   if (req.method === "POST") {
     const vmPath = path.join(process.cwd(), "vms", req.query.vm);
@@ -50,3 +50,5 @@ export default async function (req, res) {
     res.redirect("/");
   }
 }
+
+export default startVM;

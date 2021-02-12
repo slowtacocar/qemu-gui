@@ -1,6 +1,6 @@
 import keys from "../../keys.json";
 
-export default async function (req, res) {
+async function auth(req, res) {
   return new Promise((resolve) => {
     if (req.headers.authorization === keys.key) resolve();
     else {
@@ -10,3 +10,5 @@ export default async function (req, res) {
     }
   });
 }
+
+export default auth;

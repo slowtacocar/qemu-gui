@@ -2,7 +2,7 @@ import auth from "../../../lib/auth";
 import { execSync } from "child_process";
 import path from "path";
 
-export default async function (req, res) {
+async function createDisk(req, res) {
   await auth(req, res);
   if (req.method === "POST") {
     const diskPath = path.join(process.cwd(), "disks", req.body.name);
@@ -10,3 +10,5 @@ export default async function (req, res) {
     res.redirect("/disks");
   }
 }
+
+export default createDisk;

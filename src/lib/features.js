@@ -1,6 +1,6 @@
 import keys from "../../keys.json";
 
-export default [
+const vmFeatures = [
   {
     name: "hda",
     displayName: "Hard Drive",
@@ -66,3 +66,5 @@ export default [
     args: () => [],
   },
 ];
+
+export default vmFeatures;
