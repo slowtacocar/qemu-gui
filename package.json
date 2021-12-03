@@ -5,34 +5,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
     "http-proxy": "^1.18.1",
     "multer": "^1.4.2",
-    "next": "10.0.6",
+    "next": "10.2.3",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-dom": "17.0.1",
     "sass": "^1.32.7"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ],
-    "globals": {
-      "React": "readonly"
-    }
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.19.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-flowtype": "^5.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
-  }
+  "packageManager": "yarn@3.1.1"
 }
