@@ -2,6 +2,8 @@
 
 A web-based QEMU interface
 
+**I'm not updating qemu-gui. Check out Proxmox which is a supported and actually functional alternative.**
+
 This project is designed to be run on a local server and allows a client to connect and spin up KVM accelerated virtual machines. This program has only very basic support for some features of QEMU. A client can upload ISOs and create raw disk images on the server, and they can configure a virtual machine using these disks. The server also hosts a (very bad) SPICE over WebSockets client. A port can be set so a real SPICE client can be used.
 
 ![Screenshot](screenshot.png)
